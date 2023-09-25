@@ -7,7 +7,15 @@ before_install:
   - source $HOME/google-cloud-sdk/path.bash.inc
   - gcloud components update kubectl
   - gcloud auth activate-service-account --key-file service-account.json
+  - gcloud config set project multi-k8s-400107
+  - gcloud config set compute/zone asia-southeast1-a
+  - gcloud container clusters get-credentials multi-cluster
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker build -t stephengrider/react-test -f ./client/Dockerfile.dev ./client
 
+script:
+  - docker run -e CI=true stephengrider/react-test npm test 
+  
 # docker run -it -v $(pwd):/app ruby sh
 # gem install travis
 # travis login --github-token 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 --com
