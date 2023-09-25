@@ -15,8 +15,9 @@ before_install:
 
 script:
   - docker run -e CI=true stephengrider/react-test npm test 
-  
-# docker run -it -v $(pwd):/app ruby sh
-# gem install travis
-# travis login --github-token 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 --com
-# travis encrypt-file service-account.json -r HoonHenry/multi-k8s --com
+
+deploy:
+  provider: script
+  script: bash ./deploy.sh
+  on:
+    branch: master
